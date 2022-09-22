@@ -5,26 +5,81 @@ date: "2022-09-22"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+
+```{r}
+
+library(tidyverse)
+data("penguins", package = "palmerpenguins")
+head(penguins)
+nrow(penguins)
+ncol(penguins)
+penguins %>%
+  summarise(across(c(flipper_length_mm),mean,na.rm=TRUE))
+
 ```
-
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+skimr::skim(penguins)
 ```
+## Problem 1
+Based on the head and summary of penguins, we can conclude that penguins dataset contains 8 important variables, 3 of them are factor variables, which include **species**, **island**, and **sex**; 5 of them are numeric variables, which include bill_length, bill_depth, flipper_length, body_mass, and years. Among the five numeric variables, bill_length and bill_depth variables are showed as double precision floating point numbers; while flipper_length, body_mass, and years variables showed as integer.
+the size of dataset is constructed by 344 rows and 8 columns(8 variables)
+the mean of flipper length is 200.9152mm.
 
-## Including Plots
+```{r}
+## the scatterplot of flipper_length and bill_length among species variables.
+bill_length_and_flipper_length_Graph<-ggplot(data=penguins,
+       aes(x=bill_length_mm,
+           y=flipper_length_mm))+
+  geom_point(aes(color=species,
+                 shape=species),
+             size=2.5,
+             alpha=1)+
+  labs(title="Penguin bill length and flipper length for three species",
+       x="Bill Length (mm)",
+       y="Flipper Length (mm)")
+show(bill_length_and_flipper_length_Graph)
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
 ```
+##Problem 2
+```{r}
+df<-tibble(
+  sample= runif(10,-3,3),
+  logical_vector= sample>0,
+  character_vector= c("a","b","c","d","e","f","g","h","i","j"),
+  factor_vector= factor(c("S","M","M","L","S","M","L","M","S","L"))
+)
+df
+```
+```{r}
+mean(df$sample)
+```
+the mean of the numeric variables is calculated by adding all vector together and divided by 10.
+```{r}
+mean(df$logical_vector)
+```
+the mean of the logical vector was calculated by converting the TRUE into 1, FALSE into 0, and then calculated the mean as numeric variables.
+```{r}
+mean(df$character_vector)
+mean(df$factor_vector)
+```
+the mean of character vector and factor vector were showed as NA, because R can't convert the character or factor into a numeric variable.
+```{r}
+logical_numeric<-as.numeric(df$logical_vector)
+show(logical_numeric)
+mean(logical_numeric)
+```
+calculated the mean of logical vector into numeric variable by converting the TRUE into 1, and FALSE into 0 and calculating as numeric variables.
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+```{r}
+character_factor<-factor(df$character_vector)
+character_numeric<-as.numeric(character_factor)
+mean(character_numeric)
+```
+calculating the mean of factor vector by converting the factor variables into numeric variables, each factor represented by a specific number. ten different characters were represented by 1 to 10. so the mean is $$\frac{\sum_{i=1}^{10}i}{10}=5.5$$
+```{r}
+factor_numeric<-as.numeric(df$factor_vector)
+mean(factor_numeric)
+```
+three different types of factors were represented by 1, 2, 3. "S" is 1, "M" is 2, "L" is 3. Then, the mean of 10 factors was calculated by adding their representative number and dividing by 10. For this example data frame, the number of "S" is 3, the number fo "M" is 4, the number of "L" is 3. So the mean is 2.
