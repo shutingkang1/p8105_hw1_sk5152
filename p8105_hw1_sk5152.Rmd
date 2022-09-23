@@ -39,6 +39,8 @@ bill_length_and_flipper_length_Graph<-ggplot(data=penguins,
        y="Flipper Length (mm)")
 show(bill_length_and_flipper_length_Graph)
 
+ggsave("hw_1_scatterplot.pdf")
+
 ```
 ##Problem 2
 ```{r}
