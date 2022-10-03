@@ -2,7 +2,7 @@
 title: "p8105_hw1_sk5152"
 author: "Shuting Kang"
 date: "2022-09-22"
-output: html_document
+output:github_document
 ---
 
 
